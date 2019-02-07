@@ -1,0 +1,23 @@
+{
+  "name": "led-strip",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NijoElite/led-strip.git"
+  },
+  "author": "Eugene Malchenko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NijoElite/led-strip/issues"
+  },
+  "homepage": "https://github.com/NijoElite/led-strip#readme",
+  "dependencies": {
+    "raspi": "^6.0.0",
+    "raspi-gpio": "^6.2.0"
+  }
+}
