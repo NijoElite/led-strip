@@ -1,8 +1,7 @@
 const raspi = require('raspi');
-const gpio = require('raspi-gpio');
+const LedStrip = require('./models/led-strip');
 
 raspi.init(() => {
-  const output = new gpio.DigitalOutput('GPIO5');
-
-  output.write(0);
+  let strip = new LedStrip();
+  strip.setColor(100,0,0,0);
 });
