@@ -18,6 +18,7 @@
   "homepage": "https://github.com/NijoElite/led-strip#readme",
   "dependencies": {
     "raspi": "^6.0.0",
-    "raspi-gpio": "^6.2.0"
+    "raspi-gpio": "^6.2.0",
+    "raspi-soft-pwm": "^5.1.0"
   }
 }
