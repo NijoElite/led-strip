@@ -6,16 +6,27 @@ const RED_GPIO = 'GPIO13';
 const GREEN_GPIO = 'GPIO6';
 const BLUE_GPIO = 'GPIO5';
 
+const singleton = Symbol();
+const singletonEnforcer = Symbol();
 
 class LedStrip {
 
+    constructor(redPin, greenPin, bluePin, enforcer) {
+        if (enforcer !== singletonEnforcer) {
+            throw new Error("Instantiation failed: use Singleton.getInstance() instead of new.");
+        }
 
-    constructor(redPin, greenPin, bluePin) {
         this.__redPin = new pwm.SoftPWM(redPin || RED_GPIO);
         this.__greenPin = new pwm.SoftPWM(greenPin || GREEN_GPIO);
         this.__bluePin = new pwm.SoftPWM(bluePin || BLUE_GPIO);
 
         this.__fadeInterval = null;
+    }
+
+    static get instance() {
+        if (!this[singleton])
+            this[singleton] = new LedStrip(singletonEnforcer);
+        return this[singleton];
     }
 
     setColor(color) {
@@ -80,8 +91,6 @@ class LedStrip {
 
         this.__fadeInterval.clearInterval();
     }
-
-
 
 }
 
