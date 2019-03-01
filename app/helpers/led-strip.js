@@ -1,7 +1,6 @@
 const raspi = require('raspi');
 const gpio = require('raspi-gpio');
 const pwm = require('raspi-soft-pwm');
-const colorConverter = require('../helpers/color-conversation');
 
 const RED_GPIO = 'GPIO13';
 const GREEN_GPIO = 'GPIO6';
@@ -12,9 +11,9 @@ class LedStrip {
 
 
     constructor(redPin, greenPin, bluePin) {
-        this.__redPin = new pwm.SoftPWM(RED_GPIO);
-        this.__greenPin = new pwm.SoftPWM(GREEN_GPIO);
-        this.__bluePin = new pwm.SoftPWM(BLUE_GPIO);
+        this.__redPin = new pwm.SoftPWM(redPin || RED_GPIO);
+        this.__greenPin = new pwm.SoftPWM(greenPin || GREEN_GPIO);
+        this.__bluePin = new pwm.SoftPWM(bluePin || BLUE_GPIO);
 
         this.__fadeInterval = null;
     }
