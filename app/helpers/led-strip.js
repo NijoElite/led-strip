@@ -81,13 +81,13 @@ class LedStrip {
         let dt =  intervalTime / time;
 
         const fadeFunction = () => {
-            this.__changeColor({
-                red: Math.pow(red / 255, 2.2) * 255,
+            const color = { red: Math.pow(red / 255, 2.2) * 255,
                 green: Math.pow(green / 255, 2.2) * 255,
                 blue: Math.pow(blue / 255, 2.2) * 255,
-            });
+            };
+            this.__changeColor(color);
 
-            if (t >= 1.0 || t <= 0 || t + dt > 1.0 || t + dt < 0) dt *=-1;
+            if (t + dt > 1.0 || t + dt < 0) dt *=-1;
             t += dt;
 
             red   = t * (endRed - startRed)     + startRed;
