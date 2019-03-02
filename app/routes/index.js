@@ -3,8 +3,11 @@ const router = express.Router();
 
 // Home page
 router.get('/', (req, res) => {
-    res.send('Server /');
+    res.redirect('/led');
 });
+
+// /led
+router.use('/led', require('./led.js'));
 
 // /about
 router.use('/about', require('./about.js'));
@@ -13,6 +16,5 @@ router.use('/about', require('./about.js'));
 router.all('*', (req, res) => {
    res.status(404).send('що шукаєш, еблан?');
 });
-
 
 module.exports = router;

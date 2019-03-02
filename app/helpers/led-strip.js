@@ -1,5 +1,3 @@
-const raspi = require('raspi');
-const gpio = require('raspi-gpio');
 const pwm = require('raspi-soft-pwm');
 
 const RED_GPIO = 'GPIO13';
@@ -9,16 +7,22 @@ const BLUE_GPIO = 'GPIO5';
 const singleton = Symbol();
 const singletonEnforcer = Symbol();
 
+// Color {red, green, blue}
+// Mode: color || fade
+
 class LedStrip {
 
-    constructor(redPin, greenPin, bluePin, enforcer) {
-        if (enforcer !== singletonEnforcer) {
+    constructor(enforcer, redPin, greenPin, bluePin) {
+        if (singletonEnforcer !== singletonEnforcer) {
             throw new Error("Instantiation failed: use Singleton.getInstance() instead of new.");
         }
 
         this.__redPin = new pwm.SoftPWM(redPin || RED_GPIO);
         this.__greenPin = new pwm.SoftPWM(greenPin || GREEN_GPIO);
         this.__bluePin = new pwm.SoftPWM(bluePin || BLUE_GPIO);
+
+        this.__mode = 'off';
+        this.__color = {red: 0, green: 0, blue: 0};
 
         this.__fadeInterval = null;
     }
@@ -29,7 +33,19 @@ class LedStrip {
         return this[singleton];
     }
 
-    setColor(color) {
+    get color() {
+        return {
+            red: this.__color.red,
+            green: this.__color.green,
+            blue: this.__color.blue,
+        };
+    }
+
+    get mode() {
+        return this.__mode;
+    }
+
+    __changeColor(color) {
         const { red = 0, green = 0, blue = 0 } = color;
 
         this.__redPin.write(red / 255);
@@ -37,15 +53,24 @@ class LedStrip {
         this.__bluePin.write(blue / 255);
     }
 
+    setColor(color) {
+        this.stopFade();
+        this.__mode = 'color';
+
+        this.__changeColor(color);
+    }
+
     fade(startColor, endColor, time = 1000) {
+        this.__mode = 'fade';
+
         const { red: startRed = 0, green: startGreen = 0, blue: startBlue = 0 } = startColor;
         const { red: endRed = 0, green: endGreen = 0, blue: endBlue = 0 } = endColor;
 
         const intervalTime = 1;
 
-        let dr = intervalTime * (endRed - startRed) / time;
-        let dg = intervalTime * (endGreen - startGreen) / time;
-        let db = intervalTime * (endBlue - startBlue) / time ;
+        let dr = Math.abs(intervalTime * (endRed - startRed) / time);
+        let dg = Math.abs(intervalTime * (endGreen - startGreen) / time);
+        let db = Math.abs(intervalTime * (endBlue - startBlue) / time);
 
         let red = startRed;
         let green = startGreen;
@@ -58,7 +83,7 @@ class LedStrip {
                 blue: Math.pow(blue / 255, 2.2) * 255,
             };
 
-            this.setColor(color);
+            this.__changeColor(color);
 
             red += dr;
             green += dg;
