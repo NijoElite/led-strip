@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    margin: 15px;
+    background: #404040;
+}
+
+.color-picker {
+    margin: 0 auto;
+    width: 720px;
+}
+
+.jscolor {
+    height: 250px;
+    width: 97%;
+    border: none;
+    box-shadow: 0 0 3px #ffffff;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+input[type=number] {
+    border-radius: 5px;
+    border: none;
+    padding: 3px;
+}
+
+.top {
+    color: #ffffff;
+    width: 98%;
+    margin: 0 auto;
+    margin-bottom: 15px;
+}
+
+.left-column, .right-column {
+    color: #ffffff;
+    float: left;
+    width: 49%;
+    text-align: center;
+}
+
+
