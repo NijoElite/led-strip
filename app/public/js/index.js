@@ -2,7 +2,7 @@ function update() {
     const picker1 = document.getElementById('color-1').jscolor;
     const picker2 = document.getElementById('color-2').jscolor;
     const modeEl = document.getElementById('mode');
-    console.log('update');
+    const durationEl = document.getElementById('duration');
 
     const fade = modeEl.checked;
     const color1 = {
@@ -15,11 +15,13 @@ function update() {
         green: picker2.rgb[1],
         blue: picker2.rgb[2]
     };
+    const duration = +durationEl.value;
 
     const json = JSON.stringify({
        fade: fade,
        color1: color1,
        color2: color2,
+       duration: duration
     });
     const request = new XMLHttpRequest();
 

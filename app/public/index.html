@@ -3,14 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-<input id="mode" type="checkbox" onchange="update()">
-<label for="mode">Fade?</label>
-
-<input id="color-1" class="jscolor {onFineChange:'update()'}" value="ab2567">
-<input id="color-2" class="jscolor {onFineChange:'update()'}" value="ab2567">
-
+<div class="color-picker">
+    <div class="top">
+        <div>
+            <input id="mode" type="checkbox" onchange="update()">
+            <label for="mode">Fade эффект</label>
+        </div>
+        <div>
+            <input id="duration" type="number" min="0.5" max="60" step="0.5" value="3.0" onchange="update()">
+            <label for="duration">Время эффекта</label>
+        </div>
+    </div>
+    <div class="left-column">
+        <div>Начальный цвет</div>
+        <input id="color-1" class="jscolor {onFineChange:'update()'}" value="18FF00">
+    </div>
+    <div class="right-column">
+        <div>Конечный цвет</div>
+        <input id="color-2" class="jscolor {onFineChange:'update()'}" value="8C03AB">
+    </div>
+</div>
 <script src="./js/index.js"></script>
 <script src="./js/jscolor.js"></script>
 </body>
