@@ -1,6 +1,6 @@
 const pwm = require('raspi-soft-pwm');
 
-const RED_GPIO = 'GPIO13';
+const RED_GPIO = 'GPIO12';
 const GREEN_GPIO = 'GPIO6';
 const BLUE_GPIO = 'GPIO5';
 
@@ -62,59 +62,44 @@ class LedStrip {
 
     fade(startColor, endColor, time = 1000) {
         this.__mode = 'fade';
+        this.stopFade();
 
         const { red: startRed = 0, green: startGreen = 0, blue: startBlue = 0 } = startColor;
         const { red: endRed = 0, green: endGreen = 0, blue: endBlue = 0 } = endColor;
 
-        const intervalTime = 1;
+        //  x = t * (x2 - x1)  + x1
+        // если из (5,0,0) в (0,0,0)
+        // t * (0-5) + 5 = -5t + 5
 
-        let dr = Math.abs(intervalTime * (endRed - startRed) / time);
-        let dg = Math.abs(intervalTime * (endGreen - startGreen) / time);
-        let db = Math.abs(intervalTime * (endBlue - startBlue) / time);
+        const intervalTime = 1;
 
         let red = startRed;
         let green = startGreen;
         let blue = startBlue;
 
+        let t = 0;
+        let dt =  intervalTime / time;
+
         const fadeFunction = () => {
-            const color = {
+            this.__changeColor({
                 red: Math.pow(red / 255, 2.2) * 255,
                 green: Math.pow(green / 255, 2.2) * 255,
                 blue: Math.pow(blue / 255, 2.2) * 255,
-            };
+            });
 
-            this.__changeColor(color);
+            if (t >= 1.0 || t <= 0 || t + dt > 1.0 || t + dt < 0) dt *=-1;
+            t += dt;
 
-            red += dr;
-            green += dg;
-            blue += db;
-
-            if ((red > endRed && dr > 0) || (red < startRed && dr < 0)) {
-                red = dr > 0 ? endRed : startRed;
-
-                dr *= -1;
-            }
-            if ((green > endGreen && dg > 0) || (green < startGreen && dg < 0)) {
-                green = dg > 0 ? endGreen : startGreen;
-
-                dg *= -1;
-            }
-            if ((blue > endBlue && db > 0) || (blue < startBlue && db < 0)) {
-                blue = db > 0 ? endBlue : startBlue;
-
-                db *= -1;
-            }
+            red   = t * (endRed - startRed)     + startRed;
+            green = t * (endGreen - startGreen) + startGreen;
+            blue  = t * (endBlue - startBlue)   + startBlue;
         };
 
         this.__fadeInterval = setInterval(fadeFunction.bind(this), intervalTime);
     }
 
     stopFade() {
-        if (!this.__fadeInterval || !this.__fadeInterval.clearInterval) {
-            return;
-        }
-
-        this.__fadeInterval.clearInterval();
+        clearInterval(this.__fadeInterval);
     }
 
 }

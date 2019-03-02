@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const jsonParser = express.json();
 
 const { manipulateStrip } = require('../actions/led.js');
 
-router.get('/', (req, res) => {
-    const result = manipulateStrip(req.query);
-
-    res.send(result ? 'норм' : 'хуита');
+router.post('/',jsonParser, (req, res) => {
+    manipulateStrip(req.body);
+    res.status(204).end();
 });
 
 module.exports = router;

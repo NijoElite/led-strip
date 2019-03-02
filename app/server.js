@@ -5,7 +5,7 @@ const app = express();
 
 const router = require('./routes/index.js');
 
-app.use('/public', express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public'));
 app.use('/', router);
 
 app.listen(config.port, () => {
